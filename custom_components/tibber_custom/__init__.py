@@ -1,4 +1,4 @@
-"""Tibber prices"""
+"""Tibber custom"""
 from homeassistant.helpers import discovery
 import datetime
 import logging
@@ -13,7 +13,7 @@ from dateutil import tz
 from homeassistant.const import EVENT_HOMEASSISTANT_START
 from homeassistant.util import dt as dt_util
 
-DOMAIN = "tibber_prices"
+DOMAIN = "tibber_custom"
 
 DEPENDENCIES = ["tibber"]
 

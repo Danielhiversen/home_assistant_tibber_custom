@@ -1,0 +1,10 @@
+
+{
+  "domain": "tibber_custom",
+  "name": "Tibber custom",
+  "documentation": "https://github.com/Danielhiversen/home_assistant_tibber_custom",
+  "requirements": ["matplotlib"],
+  "codeowners": ["@danielhiversen"],
+  "issue_tracker": "https://github.com/Danielhiversen/home_assistant_tibber_custom/issues",
+  "config_flow": true
+}

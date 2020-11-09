@@ -23,5 +23,5 @@ Please be careful and do NOT install this on production systems. Also make sure 
 In configuration.yaml:
 
 ```
-tibber_prices:
+tibber_custom:
 ```

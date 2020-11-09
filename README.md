@@ -1,5 +1,5 @@
 # Tibber custom
-![Validate with hassfest](https://github.com/Danielhiversen/home_assistant_tibber_prices/workflows/Validate%20with%20hassfest/badge.svg)
+![Validate with hassfest](https://github.com/Danielhiversen/home_assistant_tibber_custom/workflows/Validate%20with%20hassfest/badge.svg)
 [![GitHub Release][releases-shield]][releases]
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
 
@@ -37,8 +37,8 @@ tibber_prices:
 ```
 
 
-[releases]: https://github.com/Danielhiversen/home_assistant_tibber_prices/releases
-[releases-shield]: https://img.shields.io/github/release/Danielhiversen/home_assistant_tibber_prices.svg?style=popout
-[downloads-total-shield]: https://img.shields.io/github/downloads/Danielhiversen/home_assistant_tibber_prices/total
+[releases]: https://github.com/Danielhiversen/home_assistant_tibber_custom/releases
+[releases-shield]: https://img.shields.io/github/release/Danielhiversen/home_assistant_tibber_custom.svg?style=popout
+[downloads-total-shield]: https://img.shields.io/github/downloads/Danielhiversen/home_assistant_tibber_custom/total
 [hacs-shield]: https://img.shields.io/badge/HACS-Default-orange.svg
 [hacs]: https://hacs.xyz/docs/default_repositories
