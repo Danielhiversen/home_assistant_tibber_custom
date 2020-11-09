@@ -13,16 +13,6 @@ If you use this link to signup for Tibber, you get 50 euro to buy smart home pro
 
 ![imgage](/ex1.png)
 
-{%- if selected_tag == "master" %}
-## This is a development version!
-This is **only** intended for test by developers!
-{% endif %}
-
-{%- if prerelease %}
-## This is a beta version
-Please be careful and do NOT install this on production systems. Also make sure to take a backup/snapshot before installing.
-{% endif %}
-
 
 ## Configuration 
 
