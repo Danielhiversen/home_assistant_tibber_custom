@@ -3,13 +3,11 @@ import datetime
 import logging
 
 import matplotlib
-from homeassistant.helpers import discovery
-
-matplotlib.use("Agg")
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 from dateutil import tz
 from homeassistant.const import EVENT_HOMEASSISTANT_START
+from homeassistant.helpers import discovery
 from homeassistant.util import dt as dt_util
 
 DOMAIN = "tibber_custom"
@@ -21,6 +19,7 @@ _LOGGER = logging.getLogger(__name__)
 
 def setup(hass, config):
     """Setup component."""
+    matplotlib.use("Agg")
 
     def ha_started(_):
         discovery.load_platform(hass, "camera", DOMAIN, {}, config)
@@ -117,7 +116,7 @@ def setup(hass, config):
         fig.autofmt_xdate()
         try:
             fig.savefig(path)
-        except:
+        except Exception:  # noqa: E731
             pass
         plt.close(fig)
         plt.close("all")
