@@ -1,0 +1,10 @@
+
+{
+  "domain": "tibber_prices",
+  "name": "Tibber prices",
+  "documentation": "https://github.com/Danielhiversen/home_assistant_tibber_prices",
+  "requirements": ["matplotlib"],
+  "codeowners": ["@danielhiversen"],
+  "issue_tracker": "https://github.com/Danielhiversen/home_assistant_tibber_prices/issues",
+  "config_flow": true
+}

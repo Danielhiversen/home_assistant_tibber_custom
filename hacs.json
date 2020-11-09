@@ -1,0 +1,7 @@
+{
+    "name": "Tibber prices",
+    "domains": [
+        "camera"
+    ],
+    "iot_class": "Cloud Polling"
+}
