@@ -17,6 +17,7 @@ This is **only** intended for test by developers!
 Please be careful and do NOT install this on production systems. Also make sure to take a backup/snapshot before installing.
 {% endif %}
 
+![imgage](/ex1.png)
 
 ## Configuration 
 
