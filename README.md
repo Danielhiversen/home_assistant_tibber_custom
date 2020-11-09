@@ -11,11 +11,7 @@ If you use this link to signup for Tibber, you get 50 euro to buy smart home pro
 
 [Buy me a coffee :)](http://paypal.me/dahoiv)
 
-{% if version_installed.replace(".","") | int <= 22  %}
-## Configuration by integration page
-
-Option to implement using integrations page has been introduced.
-{% endif %}
+![imgage](/ex1.png)
 
 {%- if selected_tag == "master" %}
 ## This is a development version!
