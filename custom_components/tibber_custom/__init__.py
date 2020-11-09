@@ -1,15 +1,14 @@
 """Tibber custom"""
-from homeassistant.helpers import discovery
 import datetime
 import logging
 
 import matplotlib
+from homeassistant.helpers import discovery
 
 matplotlib.use("Agg")
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 from dateutil import tz
-
 from homeassistant.const import EVENT_HOMEASSISTANT_START
 from homeassistant.util import dt as dt_util
 
