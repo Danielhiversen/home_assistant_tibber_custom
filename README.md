@@ -1,9 +1,11 @@
-# Tibber prices
+# Tibber custom
 ![Validate with hassfest](https://github.com/Danielhiversen/home_assistant_tibber_prices/workflows/Validate%20with%20hassfest/badge.svg)
 [![GitHub Release][releases-shield]][releases]
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
 
 Display Tibber prices as a graph.
+Tibber is available in Germany, Norway and Sweden
+Tibber has helped tens of thousands of new customers each month in Sweden, Norway & Germany to lower their energy bill and consumption. Tibber is using digital technology to make electricity consumption smarter.
 
 If you use this link to signup for Tibber, you get 50 euro to buy smart home products in the Tibber store: https://invite.tibber.com/6fd7a447
 
