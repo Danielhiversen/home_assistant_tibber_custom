@@ -1,4 +1,4 @@
-# Tibber Custom
+# Tibber Custom :zap: 
 ![Validate with hassfest](https://github.com/Danielhiversen/home_assistant_tibber_custom/workflows/Validate%20with%20hassfest/badge.svg)
 [![GitHub Release][releases-shield]][releases]
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
