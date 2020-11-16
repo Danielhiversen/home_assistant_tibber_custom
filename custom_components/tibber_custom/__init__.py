@@ -110,7 +110,8 @@ def setup(hass, config):
                 dates[-1] + datetime.timedelta(minutes=3),
             )
         )
-        ax.set_ylim((min(prices) - 0.005, max(prices) + 0.005))
+        ax.set_ylim((min(prices) - 0.005, max(prices) + 0.0075))
+        ax.set_xlim((dates[0], dates[-1]))
         ax.set_facecolor("white")
         ax.xaxis.set_major_formatter(x_fmt)
         fig.autofmt_xdate()
