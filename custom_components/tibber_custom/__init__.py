@@ -56,7 +56,7 @@ def setup(hass, config):
         plt.close("all")
         plt.style.use("ggplot")
         x_fmt = mdates.DateFormatter("%H", tz=tz.gettz("Europe/Berlin"))
-        fig = plt.figure()
+        fig = plt.figure(figsize=(1200/200, 700/200), dpi=200)
         ax = fig.add_subplot(111)
         ax.grid(which="major", axis="x", linestyle="-", color="gray", alpha=0.25)
         plt.tick_params(
@@ -115,7 +115,7 @@ def setup(hass, config):
         ax.xaxis.set_major_formatter(x_fmt)
         fig.autofmt_xdate()
         try:
-            fig.savefig(path)
+            fig.savefig(path, dpi=200)
         except Exception:  # noqa: E731
             pass
         plt.close(fig)
