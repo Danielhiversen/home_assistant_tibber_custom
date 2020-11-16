@@ -39,7 +39,9 @@ def setup(hass, config):
             name = home.info["viewer"]["home"]["address"].get("address1", "")
 
         if home.has_real_time_consumption:
-            realtime_state = hass.states.get(f"sensor.real_time_consumption_{slugify(name)}")
+            realtime_state = hass.states.get(
+                f"sensor.real_time_consumption_{slugify(name)}"
+            )
         else:
             realtime_state = None
 
@@ -65,7 +67,7 @@ def setup(hass, config):
         plt.close("all")
         plt.style.use("ggplot")
         x_fmt = mdates.DateFormatter("%H", tz=tz.gettz("Europe/Berlin"))
-        fig = plt.figure(figsize=(1200/200, 700/200), dpi=200)
+        fig = plt.figure(figsize=(1200 / 200, 700 / 200), dpi=200)
         ax = fig.add_subplot(111)
         ax.grid(which="major", axis="x", linestyle="-", color="gray", alpha=0.25)
         plt.tick_params(
@@ -130,7 +132,9 @@ def setup(hass, config):
                 if hour.get("consumption") is None:
                     cons_data.remove(hour)
                     continue
-                hour_to_fetch = (now - dt_util.parse_datetime(hour.get("from"))).seconds//3600
+                hour_to_fetch = (
+                    now - dt_util.parse_datetime(hour.get("from"))
+                ).seconds // 3600
             print("hour_to_fetch", hour_to_fetch)
             if hour_to_fetch > 2:
                 for key in await home.get_historic_data(hour_to_fetch):
@@ -143,7 +147,9 @@ def setup(hass, config):
             cons = []
             total_cons = 0
             for hour in cons_data:
-                date = dt_util.parse_datetime(hour.get("from")) + datetime.timedelta(minutes=30)
+                date = dt_util.parse_datetime(hour.get("from")) + datetime.timedelta(
+                    minutes=30
+                )
                 _cons = hour.get("consumption")
                 if date < dates[0] or _cons is None:
                     continue
@@ -156,9 +162,17 @@ def setup(hass, config):
             ax2.grid(False)
             ax2.xaxis.set_major_formatter(x_fmt)
             # ax2.bar(dates_cons, cons, color='#039be5', width=0.065/2, edgecolor='#c3d5e8', alpha=0.25)
-            ax2.vlines(x=dates_cons, ymin=0, ymax=cons, color='#039be5', edgecolor='#c3d5e8', alpha=0.6, linewidth=8)
+            ax2.vlines(
+                x=dates_cons,
+                ymin=0,
+                ymax=cons,
+                color="#039be5",
+                edgecolor="#c3d5e8",
+                alpha=0.6,
+                linewidth=8,
+            )
 
-            acc_cons = realtime_state.attributes.get('accumulatedConsumption')
+            acc_cons = realtime_state.attributes.get("accumulatedConsumption")
             print(realtime_state.attributes)
             if acc_cons:
                 last_hour = None
@@ -167,9 +181,28 @@ def setup(hass, config):
                     if cons is None:
                         continue
                     last_hour = dt_util.parse_datetime(hour.get("from"))
-                print("----------", last_hour, acc_cons - total_cons, total_cons, acc_cons, (now - last_hour))
-                if last_hour is not None and (now - last_hour).total_seconds() < 3600 * 2 and acc_cons - total_cons > 0:
-                    ax2.vlines([last_hour + datetime.timedelta(hours=1, minutes=30)], 0, [acc_cons - total_cons], color='#68A7C6', linewidth=8, edgecolor='#c3d5e8', alpha=0.45)
+                print(
+                    "----------",
+                    last_hour,
+                    acc_cons - total_cons,
+                    total_cons,
+                    acc_cons,
+                    (now - last_hour),
+                )
+                if (
+                    last_hour is not None
+                    and (now - last_hour).total_seconds() < 3600 * 2
+                    and acc_cons - total_cons > 0
+                ):
+                    ax2.vlines(
+                        [last_hour + datetime.timedelta(hours=1, minutes=30)],
+                        0,
+                        [acc_cons - total_cons],
+                        color="#68A7C6",
+                        linewidth=8,
+                        edgecolor="#c3d5e8",
+                        alpha=0.45,
+                    )
                     # plt.plot([last_hour + datetime.timedelta(hours=1)], [acc_cons - total_cons], "o", markersize=5, color='#007acc', alpha=0.4)
                     # ax2.bar([last_hour + datetime.timedelta(hours=1)], [acc_cons - total_cons], color='#68A7C6', width=0.065/2, edgecolor='#c3d5e8', alpha=0.15)
 
