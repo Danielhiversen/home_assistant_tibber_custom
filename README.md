@@ -3,7 +3,7 @@
 [![GitHub Release][releases-shield]][releases]
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
 
-Display Tibber prices as a graph.
+Display Tibber prices and your consumption as a graph.
 Tibber is available in Germany, Norway and Sweden
 Tibber has helped tens of thousands of new customers each month in Sweden, Norway & Germany to lower their energy bill and consumption. Tibber is using digital technology to make electricity consumption smarter.
 
