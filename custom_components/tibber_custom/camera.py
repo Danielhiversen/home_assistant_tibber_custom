@@ -5,6 +5,7 @@ import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 from dateutil import tz
 from homeassistant.components.local_file.camera import LocalFile
+from homeassistant.helpers.event import async_track_time_change
 from homeassistant.util import dt as dt_util, slugify
 
 
@@ -16,6 +17,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
 
 
 class TibberCam(LocalFile):
+
     def __init__(self, home, hass):
         matplotlib.use("Agg")
 
@@ -27,6 +29,15 @@ class TibberCam(LocalFile):
         self.hass = hass
         self._cons_data = []
         self._last_update = dt_util.now() - datetime.timedelta(hours=1)
+        self.realtime_state = None
+        self.acc_cons = None
+
+        async def _store_acc_cons(now=None):
+            if self.realtime_state:
+                self.acc_cons = self.realtime_state.attributes.get('accumulatedConsumption')
+
+        async_track_time_change(hass, _store_acc_cons, second=1, minute=0)
+
         super().__init__(self._name, self._path)
 
     async def async_camera_image(self):
@@ -35,7 +46,7 @@ class TibberCam(LocalFile):
         return await self.hass.async_add_executor_job(self.camera_image)
 
     async def _generate_fig(self):
-        if (dt_util.now() - self._last_update) < datetime.timedelta(minutes=3):
+        if (dt_util.now() - self._last_update) < datetime.timedelta(minutes=1):
             return
 
         if (self._home.last_data_timestamp - dt_util.now()).total_seconds() < 11 * 3600:
@@ -43,11 +54,9 @@ class TibberCam(LocalFile):
 
         self._last_update = dt_util.now()
         if self._home.has_real_time_consumption:
-            realtime_state = self.hass.states.get(
-                f"sensor.real_time_consumption_{slugify(self._name)}"
-            )
+            self.realtime_state = self.hass.states.get(f"sensor.real_time_consumption_{slugify(self._name)}")
         else:
-            realtime_state = None
+            self.realtime_state = None
 
         prices = []
         dates = []
@@ -69,7 +78,7 @@ class TibberCam(LocalFile):
         plt.close("all")
         plt.style.use("ggplot")
         x_fmt = mdates.DateFormatter("%H", tz=tz.gettz("Europe/Berlin"))
-        fig = plt.figure(figsize=(1200 / 200, 700 / 200), dpi=200)
+        fig = plt.figure(figsize=(1200/200, 700/200), dpi=200)
         ax = fig.add_subplot(111)
 
         ax.grid(which="major", axis="x", linestyle="-", color="gray", alpha=0.25)
@@ -93,7 +102,7 @@ class TibberCam(LocalFile):
         )
         ax.plot(dates, prices, "#039be5")
 
-        if not realtime_state:
+        if not self.realtime_state:
             ax.fill_between(dates, 0, prices, facecolor="#039be5", alpha=0.25)
 
         plt.text(
@@ -129,17 +138,17 @@ class TibberCam(LocalFile):
         ax.xaxis.set_major_formatter(x_fmt)
         fig.autofmt_xdate()
 
-        if realtime_state is not None:
+        if self.realtime_state is not None:
             hour_to_fetch = 24
             for _hour in self._cons_data:
                 if _hour.get("consumption") is None:
                     self._cons_data.remove(_hour)
                     continue
-                hour_to_fetch = (
-                    now - dt_util.parse_datetime(hour.get("from"))
-                ).seconds // 3600
+                hour_to_fetch = (now - dt_util.parse_datetime(_hour.get("from"))).total_seconds()/3600
             if hour_to_fetch > 2:
-                for key in await self._home.get_historic_data(hour_to_fetch):
+                cons_data = await self._home.get_historic_data(int(hour_to_fetch))
+                cons_data = [] if cons_data is None else cons_data
+                for key in cons_data:
                     if key in self._cons_data:
                         continue
                     self._cons_data.append(key)
@@ -147,30 +156,26 @@ class TibberCam(LocalFile):
             cons = []
             total_cons = 0
             for _hour in self._cons_data:
-                date = dt_util.parse_datetime(_hour.get("from")) + datetime.timedelta(
-                    minutes=30
-                )
                 _cons = _hour.get("consumption")
-                if date < dates[0] or _cons is None:
+                if _cons is None:
+                    continue
+
+                date = dt_util.parse_datetime(_hour.get("from")) + datetime.timedelta(minutes=30)
+                if date < dates[0]:
                     continue
                 dates_cons.append(date)
-                total_cons += _cons
                 cons.append(_cons)
+                total_cons += _cons
+
+            if self.acc_cons is None:
+                self.acc_cons = total_cons
+
             ax2 = ax.twinx()
             ax2.grid(False)
             ax2.xaxis.set_major_formatter(x_fmt)
-            ax2.vlines(
-                x=dates_cons,
-                ymin=0,
-                ymax=cons,
-                color="#039be5",
-                edgecolor="#c3d5e8",
-                alpha=0.6,
-                linewidth=8,
-                zorder=5,
-            )
+            ax2.vlines(x=dates_cons, ymin=0, ymax=cons, color='#039be5', edgecolor='#c3d5e8', alpha=0.6, linewidth=8, zorder=5,)
 
-            acc_cons = realtime_state.attributes.get("accumulatedConsumption")
+            acc_cons = self.realtime_state.attributes.get('accumulatedConsumption')
             if acc_cons:
                 last_hour = None
                 for _hour in self._cons_data:
@@ -178,25 +183,8 @@ class TibberCam(LocalFile):
                     if cons is None:
                         continue
                     last_hour = dt_util.parse_datetime(_hour.get("from"))
-                if (
-                    last_hour is not None
-                    and (now - last_hour).total_seconds() < 3600 * 2
-                    and acc_cons - total_cons > 0
-                ):
-                    ax2.vlines(
-                        [last_hour + datetime.timedelta(hours=1, minutes=30)],
-                        0,
-                        [
-                            (acc_cons - total_cons)
-                            / (now.minute * 60 + now.second)
-                            * 3600
-                        ],
-                        color="#68A7C6",
-                        linewidth=8,
-                        edgecolor="#c3d5e8",
-                        alpha=0.25,
-                        zorder=5,
-                    )
+                if last_hour is not None and (now - last_hour).total_seconds() < 3600 * 2 and acc_cons - self.acc_cons > 0:
+                    ax2.vlines([last_hour + datetime.timedelta(hours=1, minutes=30)], 0, [(acc_cons - self.acc_cons) / (now.minute *60 + now.second)*3600], color='#68A7C6', linewidth=8, edgecolor='#c3d5e8', alpha=0.35, zorder=5)
 
         try:
             await self.hass.async_add_executor_job(fig.savefig(self._path, dpi=200))
