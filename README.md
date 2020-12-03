@@ -6,6 +6,8 @@
 Display Tibber prices and your consumption as a graph.
 Tibber is available in Germany, Norway and Sweden
 Tibber has helped tens of thousands of new customers each month in Sweden, Norway & Germany to lower their energy bill and consumption. Tibber is using digital technology to make electricity consumption smarter.
+The consumption is only shown if you have a realtime meter (Tibber Pulse or Watty)
+
 
 If you use this link to signup for Tibber, you get 50 euro to buy smart home products in the Tibber store: https://invite.tibber.com/6fd7a447
 
