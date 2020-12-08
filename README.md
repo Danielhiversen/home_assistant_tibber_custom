@@ -27,6 +27,8 @@ In configuration.yaml:
 tibber_custom:
 ```
 
+You will then get a `camera.YOUR_ADRRESS` that displays the current graphic.
+
 
 [releases]: https://github.com/Danielhiversen/home_assistant_tibber_custom/releases
 [releases-shield]: https://img.shields.io/github/release/Danielhiversen/home_assistant_tibber_custom.svg?style=popout
