@@ -17,6 +17,9 @@ If you use this link to signup for Tibber, you get 50 euro to buy smart home pro
 
 ![imgage](/ex1.png)
 
+## Install
+https://hacs.xyz/docs/faq/custom_repositories
+
 ## Configuration 
 
 The Tibber component needs to be configurated first: https://www.home-assistant.io/integrations/tibber/
