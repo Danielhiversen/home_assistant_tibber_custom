@@ -184,9 +184,13 @@ class TibberCam(LocalFile):
                 zorder=5,
             )
 
-            acc_cons_hour = self.realtime_state.attributes.get("accumulatedConsumptionLastHour")
+            acc_cons_hour = self.realtime_state.attributes.get(
+                "accumulatedConsumptionLastHour"
+            )
             if acc_cons_hour:
-                timestamp = dt_util.parse_datetime(self.realtime_state.attributes.get("timestamp")).replace(minute=30, second=0)
+                timestamp = dt_util.parse_datetime(
+                    self.realtime_state.attributes.get("timestamp")
+                ).replace(minute=30, second=0)
                 ax2.vlines(
                     [timestamp],
                     0,
