@@ -205,7 +205,7 @@ class TibberCam(LocalFile):
         try:
             await self.hass.async_add_executor_job(fig.savefig, self._path)
         except Exception:  # noqa: E731
-            _LOGGER.critical("Failed to generate image", exc_info=True)
+            _LOGGER.debug("Failed to generate image", exc_info=True)
 
         plt.close(fig)
         plt.close("all")
