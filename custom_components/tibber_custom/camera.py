@@ -56,6 +56,10 @@ class TibberCam(LocalFile):
             self.realtime_state = self.hass.states.get(
                 f"sensor.real_time_consumption_{slugify(self._name)}"
             )
+            if self.realtime_state is None:
+                self.realtime_state = self.hass.states.get(
+                    f"sensor.power_{slugify(self._name)}"
+                )
         else:
             self.realtime_state = None
 
