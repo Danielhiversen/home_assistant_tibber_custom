@@ -81,13 +81,27 @@ class TibberCam(LocalFile):
         hour = now.hour
         dt = datetime.timedelta(minutes=now.minute)
 
+        # Dark Colors
+        fig_facecolor = "#1e1e1e"
+        ax_facecolor = "#1e1e1e"
+        ax_grid_x = "gray"
+        ax_grid_y = "gray"
+        ax_plot_price = "#386994"
+        ax_fill_prices = "#039be5"
+        plt_price_now_high_color = "red"
+        plt_price_now_low_color = "green"
+        plt_price_high_low_color = "white"
+        plt_tick_color = "#7c7c7c"
+
         plt.close("all")
         plt.style.use("ggplot")
         x_fmt = mdates.DateFormatter("%H", tz=tz.gettz("Europe/Berlin"))
-        fig = plt.figure(figsize=(1200 / 200, 700 / 200), dpi=200)
-        ax = fig.add_subplot(111)
+        fig = plt.figure(figsize=(1200 / 200, 700 / 200), dpi=200, facecolor=fig_facecolor)
+        ax = fig.add_subplot(111, frameon=False, facecolor=ax_facecolor)
 
-        ax.grid(which="major", axis="x", linestyle="-", color="gray", alpha=0.25)
+        ax.grid(which="major", axis="x", linestyle="-", color=ax_grid_x, alpha=0.25)
+        ax.grid(which="major", axis="y", linestyle="-", color=ax_grid_y, alpha=0.25)
+
         plt.tick_params(
             axis="both",
             which="both",
@@ -97,19 +111,23 @@ class TibberCam(LocalFile):
             left=False,
             right=False,
             labelleft=True,
+            color=plt_tick_color
         )
+
+        # Set color on current line and text depending on price-level
+        if (prices[hour]>1):
+            now_color=plt_price_now_high_color
+        else:
+            now_color=plt_price_now_low_color
+
         ax.plot(
             [dates[hour] + dt, dates[hour] + dt],
             [min(prices) - 3, max(prices) + 3],
-            "r",
-            alpha=0.35,
+            now_color,
+            alpha=0.75,
             linestyle="-",
-            zorder=2,
+            zorder=3,
         )
-        ax.plot(dates, prices, "#039be5")
-
-        if not self.realtime_state:
-            ax.fill_between(dates, 0, prices, facecolor="#039be5", alpha=0.25)
 
         plt.text(
             dates[hour] + dt,
@@ -117,7 +135,16 @@ class TibberCam(LocalFile):
             "{:.2f}".format(prices[hour]) + self._home.currency,
             fontsize=14,
             zorder=3,
+            color=now_color
         )
+
+        # Draw price curve and fill in if no consumption is present
+        ax.plot(dates, prices, ax_plot_price)
+
+        if not self.realtime_state:
+            ax.fill_between(dates, 0, prices, facecolor=ax_fill_prices, alpha=0.25)
+
+        
         min_length = 7 if len(dates) > 24 else 5
         last_hour = -1 * min_length
         for _hour in range(1, len(prices) - 1):
@@ -136,11 +163,12 @@ class TibberCam(LocalFile):
                     fontsize=10,
                     va="bottom",
                     zorder=3,
+                    color=plt_price_high_low_color
                 )
 
-        ax.set_ylim((min(prices) - 0.005, max(prices) + 0.0075))
+        ax.set_ylim((min(prices) - 0.08, max(prices) + 0.08))
         ax.set_xlim((dates[0], dates[-1]))
-        ax.set_facecolor("white")
+        ax.set_facecolor(ax_facecolor)
         ax.xaxis.set_major_formatter(x_fmt)
         fig.autofmt_xdate()
 
