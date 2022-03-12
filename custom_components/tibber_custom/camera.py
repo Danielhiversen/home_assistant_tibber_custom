@@ -98,18 +98,19 @@ class TibberCam(LocalFile):
             right=False,
             labelleft=True,
         )
-        ax.plot(
+        ax.step(
             [dates[hour] + dt, dates[hour] + dt],
             [min(prices) - 3, max(prices) + 3],
             "r",
             alpha=0.35,
             linestyle="-",
             zorder=2,
+            where='post',
         )
-        ax.plot(dates, prices, "#039be5")
+        ax.step(dates, prices, "#039be5", where='post')
 
         if not self.realtime_state:
-            ax.fill_between(dates, 0, prices, facecolor="#039be5", alpha=0.25)
+            ax.fill_between(dates, 0, prices, facecolor="#039be5", alpha=0.25, step='post')
 
         plt.text(
             dates[hour] + dt,
