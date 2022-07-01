@@ -12,6 +12,9 @@ from homeassistant.util import dt as dt_util, slugify
 
 _LOGGER = logging.getLogger(__name__)
 
+DEFAULT_WIDTH = 1200
+DEFAULT_HEIGHT = 700
+
 
 async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
     Path(hass.config.path("www/")).mkdir(parents=True, exist_ok=True)
@@ -39,12 +42,12 @@ class TibberCam(LocalFile):
 
         super().__init__(self._name, self._path)
 
-    async def async_camera_image(self):
+    async def async_camera_image(self, width=None, height=None):
         """Return bytes of camera image."""
-        await self._generate_fig()
+        await self._generate_fig(width or DEFAULT_WIDTH, height or DEFAULT_HEIGHT)
         return await self.hass.async_add_executor_job(self.camera_image)
 
-    async def _generate_fig(self):
+    async def _generate_fig(self, width, height):
         if (dt_util.now() - self._last_update) < datetime.timedelta(minutes=1):
             return
 
@@ -84,7 +87,7 @@ class TibberCam(LocalFile):
         plt.close("all")
         plt.style.use("ggplot")
         x_fmt = mdates.DateFormatter("%H", tz=tz.gettz("Europe/Berlin"))
-        fig = plt.figure(figsize=(1200 / 200, 700 / 200), dpi=200)
+        fig = plt.figure(figsize=(width / 200, height / 200), dpi=200)
         ax = fig.add_subplot(111)
 
         ax.grid(which="major", axis="x", linestyle="-", color="gray", alpha=0.25)
