@@ -7,6 +7,6 @@
   "after_dependencies": ["local_file", "tibber"],
   "codeowners": ["@danielhiversen"],
   "issue_tracker": "https://github.com/Danielhiversen/home_assistant_tibber_custom/issues",
-  "version": "0.4.1",
+  "version": "0.5",
   "config_flow": false
 }
