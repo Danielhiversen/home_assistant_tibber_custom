@@ -21,6 +21,8 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
 
     dev = []
     for home in hass.data["tibber"].get_homes(only_active=True):
+        if not home.info:
+            await home.update_info()
         dev.append(TibberCam(home, hass))
     async_add_entities(dev)
 
@@ -86,7 +88,7 @@ class TibberCam(LocalFile):
 
         plt.close("all")
         plt.style.use("ggplot")
-        x_fmt = mdates.DateFormatter("%H", tz=tz.gettz("Europe/Berlin"))
+        x_fmt = mdates.DateFormatter("%H", tz=tz.tzlocal())
         fig = plt.figure(figsize=(width / 200, height / 200), dpi=200)
         ax = fig.add_subplot(111)
 
@@ -171,9 +173,9 @@ class TibberCam(LocalFile):
                 if _cons is None:
                     continue
 
-                date = dt_util.parse_datetime(_hour.get("from")) + datetime.timedelta(
-                    minutes=30
-                )
+                date = dt_util.as_local(
+                    dt_util.parse_datetime(_hour.get("from"))
+                ) + datetime.timedelta(minutes=30)
                 if date < dates[0]:
                     continue
                 dates_cons.append(date)
