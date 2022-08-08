@@ -78,13 +78,16 @@ class TibberCam(LocalFile):
             prices.append(price_total)
             dates.append(key)
 
-        if len(prices) < 10:
+        hour = now.hour
+        dt = datetime.timedelta(minutes=now.minute)
+
+        if len(prices) < max(10, hour + 1):
             _LOGGER.warning("No prices")
             return
 
-        now = dt_util.now()
-        hour = now.hour
-        dt = datetime.timedelta(minutes=now.minute)
+        # To plot the final hour
+        prices.append(prices[-1])
+        dates.append(dates[-1] + datetime.timedelta(hours=1))
 
         plt.close("all")
         plt.style.use("ggplot")
@@ -124,7 +127,7 @@ class TibberCam(LocalFile):
             fontsize=14,
             zorder=3,
         )
-        min_length = 7 if len(dates) > 24 else 5
+        min_length = 7 if len(dates) > 25 else 5
         last_hour = -1 * min_length
         for _hour in range(1, len(prices) - 1):
             if abs(_hour - last_hour) < min_length or abs(_hour - hour) < min_length:
