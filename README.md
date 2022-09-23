@@ -27,7 +27,7 @@ The Tibber component needs to be configurated first: https://www.home-assistant.
 In configuration.yaml:
 
 ```
-tibber_custom:
+tibber_data:
 ```
 
 You will then get a `camera.YOUR_ADRRESS` that displays the current graphic.
