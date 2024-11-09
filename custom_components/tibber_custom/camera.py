@@ -39,10 +39,11 @@ class TibberCam(LocalFile):
         self.hass = hass
         self._cons_data = []
         self._last_update = dt_util.now() - datetime.timedelta(hours=1)
+        self._uniqueid = f"tibber_custom_cam_{self.name}"
         self.realtime_state = None
         # hass.bus.async_listen_once(EVENT_HOMEASSISTANT_START, self._generate_fig)
 
-        super().__init__(self._name, self._path)
+        super().__init__(self._name, self._path, self._uniqueid)
 
     async def async_camera_image(self, width=None, height=None):
         """Return bytes of camera image."""
